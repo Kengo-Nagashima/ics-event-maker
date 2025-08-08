@@ -1,0 +1,161 @@
+body {
+    font-family: sans-serif;
+    background-color: #f9f9f9;
+    padding: clamp(8px, 3vw, 32px);
+    margin: 0;
+}
+
+/* フォーム全体 */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(8px, 2vw, 28px);
+    /* 行間は画面サイズで自動調整 */
+    max-width: 96vw;
+    /* 画面幅の96%まで広がる（スマホ対応） */
+    width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: clamp(10px, 4vw, 40px);
+    /* 画面幅で可変 */
+    box-sizing: border-box;
+}
+
+/* 見出し */
+h1 {
+    font-size: clamp(1.1em, 2.5vw, 1.6em);
+    font-weight: bold;
+    text-align: center;
+    margin: 0 0 clamp(8px, 1vw, 24px) 0;
+}
+
+/* ラベルと入力欄 */
+label,
+.block-label {
+    font-size: clamp(0.98em, 2vw, 1.08em);
+    font-weight: bold;
+    margin-bottom: clamp(2px, 0.5vw, 10px);
+    display: block;
+}
+
+/* 入力欄 */
+input[type="text"],
+input[type="datetime-local"],
+textarea {
+    font-size: clamp(0.98em, 2vw, 1.15em);
+    padding: clamp(8px, 2vw, 16px);
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: clamp(2px, 0.5vw, 8px);
+    background-color: #fff;
+    transition: background-color 0.2s;
+}
+
+/* 縦並びブロック */
+.datetime-block {
+    margin-bottom: 0;
+}
+
+/* 終日ブロック */
+.allday-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 0;
+    row-gap: clamp(2px, 1vw, 12px);
+}
+
+.allday-label {
+    font-weight: bold;
+    font-size: clamp(0.98em, 2vw, 1.12em);
+    margin-bottom: clamp(2px, 0.5vw, 8px);
+    margin-left: 2px;
+}
+
+.allday-block input[type="checkbox"] {
+    width: clamp(18px, 5vw, 28px);
+    height: clamp(18px, 5vw, 28px);
+    margin-left: 0;
+}
+
+/* ボタン */
+button {
+    font-size: clamp(1em, 2vw, 1.18em);
+    padding: clamp(8px, 2vw, 16px);
+    background-color: #0078D4;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: clamp(2px, 0.5vw, 8px);
+}
+
+button:hover {
+    background-color: #005ea2;
+}
+
+/* ダウンロードリンク */
+#downloadLink {
+    margin-top: clamp(12px, 2vw, 32px);
+    font-size: clamp(1em, 2vw, 1.18em);
+    color: #0078D4;
+    text-decoration: underline;
+    cursor: pointer;
+    text-align: center;
+    display: block;
+}
+
+/* タブレット以上でフォーム幅・間隔を広げる */
+@media (min-width: 600px) {
+    form {
+        max-width: 600px;
+        gap: 32px;
+        padding: 36px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+}
+
+/* デスクトップ・大画面でさらに横長・行間広め */
+@media (min-width: 900px) {
+    form {
+        max-width: 800px;
+        gap: 40px;
+        padding: 48px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    label,
+    .block-label {
+        font-size: 1.16em;
+    }
+
+    input[type="text"],
+    input[type="datetime-local"],
+    textarea {
+        font-size: 1.18em;
+        padding: 18px;
+    }
+
+    button,
+    #downloadLink {
+        font-size: 1.22em;
+    }
+}
+
+/* 入力欄のフォーカス時の微調整 */
+input[type="text"]:focus,
+input[type="datetime-local"]:focus,
+textarea:focus {
+    outline: 2px solid #0078D4;
+    background-color: #eef6fb;
+}
