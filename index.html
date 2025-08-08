@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>予定作成＆ICSダウンロード</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <h1>予定を作成してICSを取得</h1>
+  <form id="eventForm" autocomplete="off">
+    <label for="title">
+      タイトル:<br />
+      <input type="text" id="title" name="title" required>
+    </label>
+    <!-- 開始日時 -->
+    <div class="datetime-block">
+      <label for="start" class="block-label">開始日時:</label>
+      <input type="datetime-local" id="start" name="start" required step="900">
+    </div>
+    <!-- 終日 -->
+    <div class="allday-block">
+      <label for="allday" class="allday-label">終日</label>
+      <input type="checkbox" id="allday" name="allday">
+    </div>
+    <!-- 終了日時 -->
+    <div class="datetime-block">
+      <label for="end" class="block-label">終了日時:</label>
+      <input type="datetime-local" id="end" name="end" required step="900">
+    </div>
+    <label for="location">
+      場所:<br />
+      <input type="text" id="location" name="location">
+    </label>
+    <label for="description">
+      説明:<br />
+      <textarea id="description" name="description" rows="4"></textarea>
+    </label>
+    <button type="submit">ICSを生成</button>
+    <div id="errorMessage" style="color: red; margin-top: 10px;"></div>
+  </form>
+  <a id="downloadLink" style="display:none;" download="event.ics">ICSをダウンロード</a>
+  <a id="downloadLink" style="display:none;" download="event.ics">ICSをダウンロード</a>
+  <script src="script.js"></script>
+</body>
+
+</html>
