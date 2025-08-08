@@ -308,7 +308,7 @@ button,
 @supports (-webkit-touch-callout: none) {
   @media (max-width: 375px) {
     /* 視覚的な微調整量（必要に応じて 0.25px〜1px の範囲で変更） */
-    :root { --dtl-nudgeY: 0.5px; }
+    :root { --dtl-nudgeY: 0.75px; }
 
     /* 1) 入力本体の上下パディングをわずかに非対称にして“見た目”を下へ */
     input[type="datetime-local"] {
@@ -346,6 +346,7 @@ button,
   input[type="datetime-local"] { transform: translateY(0.25px); }
 }
 */
+
 
 
 
