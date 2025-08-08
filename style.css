@@ -1,7 +1,9 @@
-/* ===== 基本設定 ===== */
+/* =========================================
+   基本設定（Option B：左右16px余白＋セーフエリア対応）
+   ========================================= */
 :root {
   /* モバイル時の左右余白（セーフエリアと合成） */
-  --page-gutter: 16px; /* ご要望の16px */
+  --page-gutter: 16px;
 }
 
 body {
@@ -9,12 +11,12 @@ body {
   background-color: #f9f9f9;
   padding: clamp(8px, 3vw, 32px);
   margin: 0;
-  /* iOS Safariの自動文字拡大対策（必要なら有効化）
+  /* iOS Safariでのテキスト自動拡大の副作用を避けたい場合は有効化
   -webkit-text-size-adjust: 100%;
   */
 }
 
-/* セーフエリア対応（iPhoneのノッチ等に追随して左右余白を確保） */
+/* iPhone のノッチ等のセーフエリアに追随して左右余白を確保 */
 @supports (padding: max(0px)) {
   body {
     padding-left: max(var(--page-gutter), env(safe-area-inset-left));
@@ -22,12 +24,14 @@ body {
   }
 }
 
-/* ===== フォーム全体 ===== */
+/* =========================================
+   フォーム全体
+   ========================================= */
 form {
   display: flex;
   flex-direction: column;
   gap: clamp(8px, 2vw, 28px);         /* 行間は画面サイズで自動調整 */
-  max-width: 100%;                    /* モバイルは全幅（左右余白は body で確保） */
+  max-width: 100%;                    /* モバイルは全幅（左右余白はbodyで確保） */
   width: 100%;
   margin: 0 auto;
   background: #fff;
@@ -35,6 +39,8 @@ form {
   border-radius: 12px;
   padding: clamp(10px, 4vw, 40px);    /* 画面幅で可変 */
   box-sizing: border-box;
+  /* レイアウト計算の揺れを抑える（問題が出る場合は none に） */
+  contain: layout paint style;
 }
 
 /* タブレット以上でフォーム幅を段階的に広げる */
@@ -55,7 +61,9 @@ form {
   }
 }
 
-/* ===== 見出し ===== */
+/* =========================================
+   見出し・ラベル
+   ========================================= */
 h1 {
   font-size: clamp(1.1em, 2.5vw, 1.6em);
   font-weight: bold;
@@ -63,7 +71,6 @@ h1 {
   margin: 0 0 clamp(8px, 1vw, 24px) 0;
 }
 
-/* ===== ラベルと入力欄 ===== */
 label,
 .block-label {
   font-size: clamp(0.98em, 2vw, 1.08em);
@@ -72,7 +79,9 @@ label,
   display: block;
 }
 
-/* 入力欄（テキスト／日時／テキストエリア） */
+/* =========================================
+   入力欄（共通）
+   ========================================= */
 input[type="text"],
 input[type="datetime-local"],
 textarea {
@@ -89,7 +98,7 @@ textarea {
   transition: background-color 0.2s;
 }
 
-/* iOS Safari向け：使用可能幅いっぱいまで広げ、右端のズレを防止（text/textarea） */
+/* iOS Safari（WebKit）で text と textarea を可用幅いっぱいに */
 @supports (-webkit-touch-callout: none) {
   input[type="text"],
   textarea {
@@ -98,23 +107,7 @@ textarea {
   }
 }
 
-/* datetime-local の見た目統一（縦位置の上詰め解消＋右端はみ出し対策） */
-input[type="datetime-local"] {
-  -webkit-appearance: none;    /* iOSネイティブの余分な装飾を外す（ピッカーは起動） */
-  appearance: none;
-  height: 2.75rem;             /* 高さを明示（他のinputと揃えやすい） */
-  line-height: 2.75rem;        /* テキストを垂直中央に（上詰め防止） */
-  padding: 0 12px;             /* 上下は line-height に任せ、左右のみ持たせる */
-  background-clip: padding-box;
-  overflow: hidden;            /* 内部UIでの微小なはみ出しをクリップ */
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  display: block;
-  box-sizing: border-box;
-}
-
-/* 入力欄のフォーカス時の微調整 */
+/* フォーカス時 */
 input[type="text"]:focus,
 input[type="datetime-local"]:focus,
 textarea:focus {
@@ -122,10 +115,30 @@ textarea:focus {
   background-color: #eef6fb;
 }
 
-/* ===== ブロック構造 ===== */
-.datetime-block {
-  margin-bottom: 0;
+/* =========================================
+   日時入力（datetime-local）：見た目統一
+   - 右端のはみ出し防止
+   - 上詰め/下詰めの見え方を改善
+   ========================================= */
+input[type="datetime-local"] {
+  -webkit-appearance: none;    /* iOSネイティブの余分な装飾を外す（ピッカーは起動） */
+  appearance: none;
+  height: 2.75rem;             /* 他 input と揃えやすいベース高さ */
+  line-height: 2.75rem;        /* テキストを視覚中央に寄せる */
+  padding: 0 12px;             /* 上下は line-height に任せ、左右のみ確保 */
+  background-clip: padding-box;
+  overflow: hidden;            /* 内部UIの微小なはみ出しをクリップ */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  display: block;
+  box-sizing: border-box;
 }
+
+/* =========================================
+   ブロック構造
+   ========================================= */
+.datetime-block { margin-bottom: 0; }
 
 .allday-block {
   display: flex;
@@ -134,43 +147,39 @@ textarea:focus {
   margin-bottom: 0;
   row-gap: clamp(2px, 1vw, 12px);
 }
-
 .allday-label {
   font-weight: bold;
   font-size: clamp(0.98em, 2vw, 1.12em);
   margin-bottom: clamp(2px, 0.5vw, 8px);
   margin-left: 2px;
 }
-
 .allday-block input[type="checkbox"] {
   width: clamp(18px, 5vw, 28px);
   height: clamp(18px, 5vw, 28px);
   margin-left: 0;
 }
 
-/* 終日ONのときの視覚効果（読み取り専用感を出す） */
+/* 終日ON の視覚効果（読み取り専用感） */
 input.allday {
   background-color: #f3f4f6;
   color: #555;
 }
 
-/* ===== ボタン ===== */
+/* =========================================
+   ボタン・リンク・エラー
+   ========================================= */
 button {
   font-size: clamp(1em, 2vw, 1.18em);
   padding: clamp(8px, 2vw, 16px);
   background-color: #0078D4;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   margin-top: clamp(2px, 0.5vw, 8px);
 }
+button:hover { background-color: #005ea2; }
 
-button:hover {
-  background-color: #005ea2;
-}
-
-/* ===== ダウンロードリンク ===== */
 #downloadLink {
   margin-top: clamp(12px, 2vw, 32px);
   font-size: clamp(1em, 2vw, 1.18em);
@@ -181,22 +190,18 @@ button:hover {
   display: none; /* 生成前は非表示。生成時に JS で block にする */
 }
 
-/* ===== エラーメッセージ ===== */
 #errorMessage {
   color: #b91c1c;
   font-size: 0.95em;
   text-align: center;
 }
 
-/* ===== 安定化（任意） ===== */
-form {
-  contain: layout paint style; /* 特定環境でのレイアウト計算の揺れを抑える */
-}
-
-/* ===== 端末別の微調整パッチ ===== */
-
-/* 1) iPhone SE 等の狭幅端末: 余白を半分(8px)＋縦スクロール軽減 */
+/* =========================================
+   端末別の微調整（iPhone SE 対応）
+   幅 375px 以下：縦スクロール軽減＆入力高さ調整
+   ========================================= */
 @media (max-width: 375px) {
+  /* ご要望どおり SE では左右余白を“半分の 8px”に */
   :root { --page-gutter: 8px; }
 
   form {
@@ -206,51 +211,88 @@ form {
   }
 
   h1 {
-    margin-bottom: 8px; /* 見出し下の余白を圧縮 */
-    font-size: 1.2em;   /* 見出しサイズも控えめに */
+    margin-bottom: 8px;
+    font-size: 1.2em;
   }
 
   input[type="text"],
   input[type="datetime-local"],
   textarea {
-    padding: 10px 12px; /* 入力欄の上下パディングを控えめに */
+    padding: 10px 12px; /* 上下を控えめにして縦スペースを節約 */
     font-size: 1em;
   }
 
-  /* datetime の“上詰め”見え対策を維持しつつ高さも少しだけ低く */
+  /* SE 向け：datetime をやや低め＋中央寄せに */
   input[type="datetime-local"] {
-    height: 2.5rem;
-    line-height: 2.5rem;
+    height: 2.5rem;      /* 2.75rem → 2.5rem */
+    line-height: normal; /* 内部値のレイアウトに任せる */
+    padding: 8px 12px;   /* 上下パディングで視覚中央に寄せる */
   }
 
-  textarea {
-    min-height: 72px;   /* 既定より少し低め */
-  }
+  textarea { min-height: 72px; }
 
   button { padding: 10px 12px; }
   #downloadLink { margin-top: 10px; }
   #errorMessage { font-size: 0.9em; }
 }
 
-/* さらに縦が短いケース（SafariのUI表示で実効高さが小さい時）も念のためケア */
+/* 高さがより短い SE ケース（Safari UI 状態でビューポートが縮む等） */
 @media (max-height: 640px) and (max-width: 375px) {
   form { gap: 10px; padding: 12px; }
   h1 { font-size: 1.05em; }
   textarea { min-height: 64px; }
 }
 
-/* 2) iOS Safari の幅計算を端末幅に合わせて最適化
-   - text/textarea では -webkit-fill-available を使い、
-   - datetime-local は 100% で安定優先（fill-availableが過剰に広がる端末があるため） */
+/* =========================================
+   iOS Safari（WebKit）× iPhone SE：datetime の“視覚ど真ん中”最終調整
+   - transform は使わず、上下 padding と内部ボックス揃えで解決
+   - 左右位置のブレを防止
+   ========================================= */
 @supports (-webkit-touch-callout: none) {
-  /* text/textarea は上で指定済み */
-  input[type="datetime-local"] {
-    width: 100%;
-    max-width: 100%;
+  @media (max-width: 375px) {
+    /* 入力本体：上下非対称の padding で気持ち下げる（中央に見せる） */
+    input[type="datetime-local"] {
+      /* 既に 2.5rem & line-height: normal を上で指定済み */
+      padding-block: 6px 8px;     /* 上6 / 下8（必要なら 6.5 / 7.5 など微調整可） */
+      padding-inline: 12px;       /* 他の input と揃える。必要なら 13px まで調整可 */
+    }
+
+    /* 内部値ボックスを中央揃え。transform は使わない（横ズレ防止） */
+    input[type="datetime-local"]::-webkit-date-and-time-value {
+      display: inline-flex;
+      align-items: center;  /* 縦方向センター */
+      line-height: 1.2;
+      transform: none !important;
+      padding: 0;
+      margin: 0;
+    }
+    input[type="datetime-local"]::-webkit-datetime-edit {
+      padding: 0; margin: 0;
+    }
+    input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
+      display: inline-flex;
+      align-items: center;
+      padding: 0; margin: 0;
+    }
+    input[type="datetime-local"]::-webkit-datetime-edit-text,
+    input[type="datetime-local"]::-webkit-datetime-edit-hour-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-minute-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-ampm-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-day-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-month-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-year-field {
+      padding: 0; margin: 0;
+    }
+
+    /* “まだ気持ち左に見える”場合だけ 1px だけ左パディングを増やす
+       （視覚合わせ用。不要なら触らない） */
+    /* input[type="datetime-local"] { padding-left: 13px; } */
   }
 }
 
-/* 3) 念のため：親子の幅伝播を安定化 */
+/* =========================================
+   念のための幅伝播安定化
+   ========================================= */
 .datetime-block,
 .allday-block,
 label,
@@ -261,94 +303,3 @@ button,
 #downloadLink {
   max-inline-size: 100%;
 }
-
-/* ===== iPhone SE の datetime-local 下詰め解消（iOS Safari 向け） ===== */
-/* 端末幅 375px 以下（SE系）かつ iOS Safari にだけ適用 */
-@supports (-webkit-touch-callout: none) {
-  @media (max-width: 375px) {
-    /* 入力自体は高さを控えめ＋上下は padding で“視覚中央寄せ” */
-    input[type="datetime-local"] {
-      height: 2.5rem;          /* 既存より少し低め（SE向け） */
-      line-height: normal;     /* 内部実装に任せる */
-      padding-block: 6px;      /* 上下対称に余白を取り中央に見せる */
-      padding-inline: 12px;
-    }
-
-    /* WebKit の内部ボックスを揃える（行間・余白のズレを抑える） */
-    input[type="datetime-local"]::-webkit-date-and-time-value {
-      height: auto;
-      line-height: 1.2;
-      padding: 0;
-      margin: 0;
-    }
-    input[type="datetime-local"]::-webkit-datetime-edit {
-      padding: 0;
-      margin: 0;
-    }
-    input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
-      display: inline-flex;
-      align-items: center;     /* 中央寄せの肝 */
-    }
-    /* 各フィールド（年/月/日/時/分/区切り）への余白をゼロに近づける */
-    input[type="datetime-local"]::-webkit-datetime-edit-text,
-    input[type="datetime-local"]::-webkit-datetime-edit-hour-field,
-    input[type="datetime-local"]::-webkit-datetime-edit-minute-field,
-    input[type="datetime-local"]::-webkit-datetime-edit-ampm-field,
-    input[type="datetime-local"]::-webkit-datetime-edit-day-field,
-    input[type="datetime-local"]::-webkit-datetime-edit-month-field,
-    input[type="datetime-local"]::-webkit-datetime-edit-year-field {
-      padding: 0;
-      margin: 0;
-    }
-  }
-}
-
-/* ===== iPhone SE（幅375px以下）× iOS Safari 向け 下方向への微調整 ===== */
-/* 既存の SE 調整のさらに下に追加してください */
-@supports (-webkit-touch-callout: none) {
-  @media (max-width: 375px) {
-    /* 視覚的な微調整量（必要に応じて 0.25px〜1px の範囲で変更） */
-    :root { --dtl-nudgeY: 1px; }
-
-    /* 1) 入力本体の上下パディングをわずかに非対称にして“見た目”を下へ */
-    input[type="datetime-local"] {
-      /* 既存値: height: 2.5rem; line-height: normal; padding-block: 6px; など */
-      padding-block: 6.5px 7.5px;  /* 下側を +1px 相当（合計はほぼ同じ） */
-    }
-
-    /* 2) 内部値ボックスを微妙に下へ（サブピクセル単位の追い込み） */
-    input[type="datetime-local"]::-webkit-date-and-time-value {
-      display: inline-flex;
-      align-items: center;
-      line-height: 1.2;
-      transform: translateY(var(--dtl-nudgeY));  /* 下方向へ 0.5px 移動 */
-    }
-
-    /* 3) 余分な余白をゼロ化して“効き”を安定させる */
-    input[type="datetime-local"]::-webkit-datetime-edit,
-    input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper,
-    input[type="datetime-local"]::-webkit-datetime-edit-text,
-    input[type="datetime-local"]::-webkit-datetime-edit-hour-field,
-    input[type="datetime-local"]::-webkit-datetime-edit-minute-field,
-    input[type="datetime-local"]::-webkit-datetime-edit-ampm-field,
-    input[type="datetime-local"]::-webkit-datetime-edit-day-field,
-    input[type="datetime-local"]::-webkit-datetime-edit-month-field,
-    input[type="datetime-local"]::-webkit-datetime-edit-year-field {
-      padding: 0;
-      margin: 0;
-    }
-  }
-}
-
-/* 予備：上記でも“あとほんの少し”下げたい場合に有効化（0.25〜0.5px刻みで調整） */
-/*
-@media (max-width: 375px) {
-  input[type="datetime-local"] { transform: translateY(0.25px); }
-}
-*/
-
-
-
-
-
-
