@@ -306,6 +306,7 @@ button,
 /* どうしても 1px 程度の“沈み”が残る iOS ビルド向けの微調整（任意） */
 @media (max-width: 375px) {
   /* 必要になったときだけ、以下の transform を有効化してください */
-  /* input[type="datetime-local"] { transform: translateY(-0.5px); } */
+input[type="datetime-local"] { transform: translateY(-0.5px); }
 }
+
 
