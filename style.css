@@ -269,3 +269,79 @@ button,
    既に付けている場合のみ、次の1行のコメントを外してください。 */
 /* form { contain: none; } */
 
+/* ===== iPhone SE 等の狭幅端末向け：縦方向の余白と高さをさらに圧縮 ===== */
+/* 目安：幅375px 以下（SE系のポートレート） */
+@media (max-width: 375px) {
+  /* 左右余白は 8px（ご要望どおり）＋セーフエリアを維持 */
+  :root { --page-gutter: 8px; }
+  @supports (padding: max(0px)) {
+    body {
+      padding-left: max(var(--page-gutter), env(safe-area-inset-left));
+      padding-right: max(var(--page-gutter), env(safe-area-inset-right));
+      /* 上下も少し詰める */
+      padding-top: max(8px, env(safe-area-inset-top));
+      padding-bottom: max(8px, env(safe-area-inset-bottom));
+    }
+  }
+
+  /* フォーム全体の内側余白・行間を圧縮 */
+  form {
+    gap: 12px;      /* 行間 */
+    padding: 14px;  /* 内側余白 */
+    border-radius: 10px;
+  }
+
+  /* タイトルの余白・サイズを控えめに */
+  h1 {
+    margin-bottom: 6px;
+    font-size: 1.1em;
+  }
+
+  /* ラベルの下の余白を最小に */
+  label, .block-label {
+    margin-bottom: 2px;
+  }
+
+  /* 入力欄の上下パディングを詰める（横は読みやすさ優先で維持） */
+  input[type="text"],
+  input[type="datetime-local"],
+  textarea {
+    padding: 8px 10px;
+    font-size: 1em;     /* 読みやすさを大きく損なわない範囲で常用 */
+  }
+
+  /* datetime の“上詰め”見え対策を維持しつつ高さも少しだけ低く */
+  input[type="datetime-local"] {
+    height: 2.5rem;
+    line-height: 2.5rem;
+  }
+
+  /* 説明欄が長くなる前提がなければ最低高さを抑える */
+  textarea {
+    min-height: 72px;   /* 既定より少し低め */
+  }
+
+  /* ボタンとリンク周りを詰める */
+  button {
+    padding: 10px 12px;
+  }
+  #downloadLink {
+    margin-top: 10px;
+  }
+
+  /* エラー表示も一回り控えめに */
+  #errorMessage {
+    font-size: 0.9em;
+  }
+}
+
+/* さらに縦が短いケース（SafariのUI表示で実効高さが小さい時）も念のためケア */
+@media (max-height: 640px) and (max-width: 375px) {
+  form {
+    gap: 10px;
+    padding: 12px;
+  }
+  h1 { font-size: 1.05em; }
+  textarea { min-height: 64px; }
+}
+
