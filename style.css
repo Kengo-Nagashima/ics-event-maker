@@ -261,3 +261,51 @@ button,
 #downloadLink {
   max-inline-size: 100%;
 }
+
+/* ===== iPhone SE の datetime-local 下詰め解消（iOS Safari 向け） ===== */
+/* 端末幅 375px 以下（SE系）かつ iOS Safari にだけ適用 */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 375px) {
+    /* 入力自体は高さを控えめ＋上下は padding で“視覚中央寄せ” */
+    input[type="datetime-local"] {
+      height: 2.5rem;          /* 既存より少し低め（SE向け） */
+      line-height: normal;     /* 内部実装に任せる */
+      padding-block: 6px;      /* 上下対称に余白を取り中央に見せる */
+      padding-inline: 12px;
+    }
+
+    /* WebKit の内部ボックスを揃える（行間・余白のズレを抑える） */
+    input[type="datetime-local"]::-webkit-date-and-time-value {
+      height: auto;
+      line-height: 1.2;
+      padding: 0;
+      margin: 0;
+    }
+    input[type="datetime-local"]::-webkit-datetime-edit {
+      padding: 0;
+      margin: 0;
+    }
+    input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
+      display: inline-flex;
+      align-items: center;     /* 中央寄せの肝 */
+    }
+    /* 各フィールド（年/月/日/時/分/区切り）への余白をゼロに近づける */
+    input[type="datetime-local"]::-webkit-datetime-edit-text,
+    input[type="datetime-local"]::-webkit-datetime-edit-hour-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-minute-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-ampm-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-day-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-month-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-year-field {
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+
+/* どうしても 1px 程度の“沈み”が残る iOS ビルド向けの微調整（任意） */
+@media (max-width: 375px) {
+  /* 必要になったときだけ、以下の transform を有効化してください */
+  /* input[type="datetime-local"] { transform: translateY(-0.5px); } */
+}
+
