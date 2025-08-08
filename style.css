@@ -190,3 +190,82 @@ form {
         width: 100%;
     }
 }
+
+/* ===== 端末別の微調整パッチ ===== */
+
+/* 1) iPhone SE 等の狭幅端末: 余白を半分(8px)＋縦スクロール軽減 */
+@media (max-width: 375px) {
+  :root { --page-gutter: 8px; }
+
+  form {
+    gap: 16px;                 /* 行間を少し詰める */
+    padding: 16px;             /* フォーム内余白も少し詰める */
+  }
+
+  h1 {
+    margin-bottom: 8px;        /* 見出し下の余白を圧縮 */
+    font-size: 1.2em;          /* 見出しサイズも控えめに */
+  }
+
+  input[type="text"],
+  input[type="datetime-local"],
+  textarea {
+    padding: 10px 12px;        /* 入力欄の上下パディングを控えめに */
+    font-size: 1em;
+  }
+
+  button {
+    padding: 10px 12px;
+  }
+}
+
+/* 2) datetime-local の見た目統一（縦位置の上詰め解消＋右端はみ出し対策） */
+input[type="datetime-local"] {
+  /* 見た目の高さと内側のテキスト位置をコントロール */
+  -webkit-appearance: none;    /* iOSネイティブの余分な装飾を外す（ピッカーは起動します） */
+  appearance: none;
+  height: 2.75rem;             /* 高さを明示（他のinputと合わせやすい） */
+  line-height: 2.75rem;        /* テキストを垂直中央に（上詰め防止） */
+  padding: 0 12px;             /* 上下は line-height に任せ、左右だけ持たせる */
+  background-clip: padding-box;
+  overflow: hidden;            /* 内部UIでの微小なはみ出しをクリップ */
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  display: block;
+  box-sizing: border-box;
+}
+
+/* 3) iOS Safari の幅計算を端末幅に合わせて最適化
+   - text/textarea では -webkit-fill-available を使い、
+   - datetime-local は 100% で安定優先（fill-availableが過剰に広がる端末があるため） */
+@supports (-webkit-touch-callout: none) {
+  input[type="text"],
+  textarea {
+    width: -webkit-fill-available;
+    max-width: 100%;
+  }
+
+  /* datetime は 100%固定（上で width:100% を指定済み） */
+  input[type="datetime-local"] {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* 4) 念のため：親子の幅伝播を安定化 */
+.datetime-block,
+.allday-block,
+label,
+input[type="text"],
+input[type="datetime-local"],
+textarea,
+button,
+#downloadLink {
+  max-inline-size: 100%;
+}
+
+/* 5) （任意）もし form の contain が幅計算に影響している場合はオフに
+   既に付けている場合のみ、次の1行のコメントを外してください。 */
+/* form { contain: none; } */
+
