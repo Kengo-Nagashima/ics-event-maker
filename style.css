@@ -303,12 +303,50 @@ button,
   }
 }
 
+/* ===== iPhone SE（幅375px以下）× iOS Safari 向け 下方向への微調整 ===== */
+/* 既存の SE 調整のさらに下に追加してください */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 375px) {
+    /* 視覚的な微調整量（必要に応じて 0.25px〜1px の範囲で変更） */
+    :root { --dtl-nudgeY: 0.5px; }
 
-/* どうしても 1px 程度の“沈み”が残る iOS ビルド向けの微調整（任意） */
-@media (max-width: 375px) {
-  /* 必要になったときだけ、以下の transform を有効化してください */
-  /* input[type="datetime-local"] { transform: translateY(-0.5px); } */
+    /* 1) 入力本体の上下パディングをわずかに非対称にして“見た目”を下へ */
+    input[type="datetime-local"] {
+      /* 既存値: height: 2.5rem; line-height: normal; padding-block: 6px; など */
+      padding-block: 6.5px 7.5px;  /* 下側を +1px 相当（合計はほぼ同じ） */
+    }
+
+    /* 2) 内部値ボックスを微妙に下へ（サブピクセル単位の追い込み） */
+    input[type="datetime-local"]::-webkit-date-and-time-value {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1.2;
+      transform: translateY(var(--dtl-nudgeY));  /* 下方向へ 0.5px 移動 */
+    }
+
+    /* 3) 余分な余白をゼロ化して“効き”を安定させる */
+    input[type="datetime-local"]::-webkit-datetime-edit,
+    input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper,
+    input[type="datetime-local"]::-webkit-datetime-edit-text,
+    input[type="datetime-local"]::-webkit-datetime-edit-hour-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-minute-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-ampm-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-day-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-month-field,
+    input[type="datetime-local"]::-webkit-datetime-edit-year-field {
+      padding: 0;
+      margin: 0;
+    }
+  }
 }
+
+/* 予備：上記でも“あとほんの少し”下げたい場合に有効化（0.25〜0.5px刻みで調整） */
+/*
+@media (max-width: 375px) {
+  input[type="datetime-local"] { transform: translateY(0.25px); }
+}
+*/
+
 
 
 
