@@ -304,14 +304,4 @@ button,
   max-inline-size: 100%;
 }
 
-/* iOS Safari 専用：datetime-local の内部テキストを中央寄せ */
-@supports (-webkit-touch-callout: none) {
-  input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
-    display: flex;
-    justify-content: center; /* 横方向を中央寄せ */
-    align-items: center;     /* 縦方向も中央寄せ */
-    width: 100%;
-  }
-}
-
 
