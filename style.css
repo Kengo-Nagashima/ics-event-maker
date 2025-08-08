@@ -124,7 +124,7 @@ input[type="datetime-local"] {
   -webkit-appearance: none;    /* iOSネイティブの余分な装飾を外す（ピッカーは起動） */
   appearance: none;
   height: 2.75rem;             /* 他 input と揃えやすいベース高さ */
-  line-height: 2.75rem;        /* テキストを視覚中央に寄せる */
+  line-height: 2.75rem;        /* テキストを視覚中央に寄せる（SEでは後段で上書き） */
   padding: 0 12px;             /* 上下は line-height に任せ、左右のみ確保 */
   background-clip: padding-box;
   overflow: hidden;            /* 内部UIの微小なはみ出しをクリップ */
@@ -253,7 +253,7 @@ button:hover { background-color: #005ea2; }
     /* 入力本体：上下非対称の padding で気持ち下げる（中央に見せる） */
     input[type="datetime-local"] {
       /* 既に 2.5rem & line-height: normal を上で指定済み */
-      padding-block: 6px 8px;     /* 上6 / 下8（必要なら 6.5 / 7.5 など微調整可） */
+      padding-block: 6px 8px;     /* 上6 / 下8（必要なら 6.5 / 7.5 等で微調整可） */
       padding-inline: 12px;       /* 他の input と揃える。必要なら 13px まで調整可 */
     }
 
@@ -303,5 +303,3 @@ button,
 #downloadLink {
   max-inline-size: 100%;
 }
-
-
