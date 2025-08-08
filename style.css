@@ -1,136 +1,192 @@
+/* ===== 基本設定 ===== */
+:root {
+    /* モバイル時の左右余白（セーフエリアと合成） */
+    --page-gutter: 16px;
+}
+
 body {
-  font-family: sans-serif;
-  background-color: #f9f9f9;
-  padding: clamp(8px, 3vw, 32px);
-  margin: 0;
+    font-family: sans-serif;
+    background-color: #f9f9f9;
+    padding: clamp(8px, 3vw, 32px);
+    margin: 0;
+    /* iOS Safariでのフォント拡大時のズレを抑えるなら以下を有効化
+  -webkit-text-size-adjust: 100%;
+  */
 }
 
-/* フォーム全体 */
+/* セーフエリア対応（iPhoneのノッチ等に追随して左右余白を確保） */
+@supports (padding: max(0px)) {
+    body {
+        padding-left: max(var(--page-gutter), env(safe-area-inset-left));
+        padding-right: max(var(--page-gutter), env(safe-area-inset-right));
+    }
+}
+
+/* ===== フォーム全体 ===== */
 form {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(8px, 2vw, 28px);
-  max-width: 96vw;
-  width: 100%;
-  margin: 0 auto;
-  background: #fff;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  border-radius: 12px;
-  padding: clamp(10px, 4vw, 40px);
-  box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(8px, 2vw, 28px);
+    /* 行間は画面サイズで自動調整 */
+    max-width: 100%;
+    /* モバイルは全幅（左右余白は body で確保） */
+    width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: clamp(10px, 4vw, 40px);
+    /* 画面幅で可変 */
+    box-sizing: border-box;
 }
 
-/* 見出し */
+/* タブレット以上でフォーム幅を段階的に広げる */
+@media (min-width: 600px) {
+    form {
+        max-width: 600px;
+        gap: 32px;
+        padding: 36px;
+    }
+}
+
+/* デスクトップ以上でさらに広げる */
+@media (min-width: 900px) {
+    form {
+        max-width: 800px;
+        gap: 40px;
+        padding: 48px;
+    }
+}
+
+/* ===== 見出し ===== */
 h1 {
-  font-size: clamp(1.1em, 2.5vw, 1.6em);
-  font-weight: bold;
-  text-align: center;
-  margin: 0 0 clamp(8px, 1vw, 24px) 0;
+    font-size: clamp(1.1em, 2.5vw, 1.6em);
+    font-weight: bold;
+    text-align: center;
+    margin: 0 0 clamp(8px, 1vw, 24px) 0;
 }
 
-/* ラベルと入力欄 */
+/* ===== ラベルと入力欄 ===== */
 label,
 .block-label {
-  font-size: clamp(0.98em, 2vw, 1.08em);
-  font-weight: bold;
-  margin-bottom: clamp(2px, 0.5vw, 10px);
-  display: block;
+    font-size: clamp(0.98em, 2vw, 1.08em);
+    font-weight: bold;
+    margin-bottom: clamp(2px, 0.5vw, 10px);
+    display: block;
 }
 
-/* 入力欄 */
+/* 入力欄（テキスト／日時／テキストエリア） */
 input[type="text"],
 input[type="datetime-local"],
 textarea {
-  font-size: clamp(0.98em, 2vw, 1.15em);
-  padding: clamp(8px, 2vw, 16px);
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: clamp(2px, 0.5vw, 8px);
-  background-color: #fff;
-  transition: background-color 0.2s;
+    font-size: clamp(0.98em, 2vw, 1.15em);
+    padding: clamp(8px, 2vw, 16px);
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    box-sizing: border-box;
+    margin-top: clamp(2px, 0.5vw, 8px);
+    background-color: #fff;
+    transition: background-color 0.2s;
 }
 
-/* 終日ONのときの視覚効果 */
-input.allday {
-  background-color: #f3f4f6;
-  color: #555;
+/* iOS Safari向け：使用可能幅いっぱいまで広げ、右端のズレを防止 */
+@supports (-webkit-touch-callout: none) {
+
+    input[type="text"],
+    input[type="datetime-local"],
+    textarea {
+        width: -webkit-fill-available;
+    }
 }
 
-/* 縦並びブロック */
-.datetime-block { margin-bottom: 0; }
-
-/* 終日ブロック */
-.allday-block {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 0;
-  row-gap: clamp(2px, 1vw, 12px);
-}
-.allday-label {
-  font-weight: bold;
-  font-size: clamp(0.98em, 2vw, 1.12em);
-  margin-bottom: clamp(2px, 0.5vw, 8px);
-  margin-left: 2px;
-}
-.allday-block input[type="checkbox"] {
-  width: clamp(18px, 5vw, 28px);
-  height: clamp(18px, 5vw, 28px);
-  margin-left: 0;
-}
-
-/* ボタン */
-button {
-  font-size: clamp(1em, 2vw, 1.18em);
-  padding: clamp(8px, 2vw, 16px);
-  background-color: #0078D4;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: clamp(2px, 0.5vw, 8px);
-}
-button:hover { background-color: #005ea2; }
-
-/* ダウンロードリンク（初期は非表示） */
-#downloadLink {
-  margin-top: clamp(12px, 2vw, 32px);
-  font-size: clamp(1em, 2vw, 1.18em);
-  color: #0078D4;
-  text-decoration: underline;
-  cursor: pointer;
-  text-align: center;
-  display: none;
-}
-
-/* エラーメッセージ */
-#errorMessage {
-  color: #b91c1c;
-  font-size: 0.95em;
-  text-align: center;
-}
-
-/* タブレット以上 */
-@media (min-width: 600px) {
-  form { max-width: 600px; gap: 32px; padding: 36px; }
-  h1 { font-size: 1.8em; }
-}
-
-/* デスクトップ以上 */
-@media (min-width: 900px) {
-  form { max-width: 800px; gap: 40px; padding: 48px; }
-  h1 { font-size: 2em; }
-  label, .block-label { font-size: 1.16em; }
-  input[type="text"], input[type="datetime-local"], textarea { font-size: 1.18em; padding: 18px; }
-  button, #downloadLink { font-size: 1.22em; }
-}
-
-/* フォーカス時 */
+/* 入力欄のフォーカス時の微調整 */
 input[type="text"]:focus,
 input[type="datetime-local"]:focus,
 textarea:focus {
-  outline: 2px solid #0078D4;
-  background-color: #eef6fb;
+    outline: 2px solid #0078D4;
+    background-color: #eef6fb;
+}
+
+/* ===== ブロック構造 ===== */
+.datetime-block {
+    margin-bottom: 0;
+}
+
+.allday-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 0;
+    row-gap: clamp(2px, 1vw, 12px);
+}
+
+.allday-label {
+    font-weight: bold;
+    font-size: clamp(0.98em, 2vw, 1.12em);
+    margin-bottom: clamp(2px, 0.5vw, 8px);
+    margin-left: 2px;
+}
+
+.allday-block input[type="checkbox"] {
+    width: clamp(18px, 5vw, 28px);
+    height: clamp(18px, 5vw, 28px);
+    margin-left: 0;
+}
+
+/* 終日ONのときの視覚効果（読み取り専用感を出す） */
+input.allday {
+    background-color: #f3f4f6;
+    color: #555;
+}
+
+/* ===== ボタン ===== */
+button {
+    font-size: clamp(1em, 2vw, 1.18em);
+    padding: clamp(8px, 2vw, 16px);
+    background-color: #0078D4;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: clamp(2px, 0.5vw, 8px);
+}
+
+button:hover {
+    background-color: #005ea2;
+}
+
+/* ===== ダウンロードリンク ===== */
+#downloadLink {
+    margin-top: clamp(12px, 2vw, 32px);
+    font-size: clamp(1em, 2vw, 1.18em);
+    color: #0078D4;
+    text-decoration: underline;
+    cursor: pointer;
+    text-align: center;
+    display: none;
+    /* 生成前は非表示。生成時に JS で block にする */
+}
+
+/* ===== エラーメッセージ ===== */
+#errorMessage {
+    color: #b91c1c;
+    font-size: 0.95em;
+    text-align: center;
+}
+
+/* ===== 追加の安定化（任意） ===== */
+/* 特定環境でのレイアウト計算の揺れを抑える */
+form {
+    contain: layout paint style;
+}
+
+/* モバイル幅ではフォームを確実に全幅に（余白はbodyで確保） */
+@media (max-width: 600px) {
+    form {
+        max-width: 100% !important;
+        width: 100%;
+    }
 }
