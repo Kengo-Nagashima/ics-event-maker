@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const downloadLink = document.getElementById('downloadLink');
   const errorMessage = document.getElementById('errorMessage');
 
-  const DEFAULT_DURATION_MIN = 30; // 初期の所要時間
+  const DEFAULT_DURATION_MIN = 30; // 初期の所要時間（開始+30分）
+
   // 現在時刻を step 分単位に切り上げ（ちょうどのときはそのまま）
   function getRoundedLocalTime(minutes = 15) {
     const now = new Date();
@@ -28,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function toLocalDate(dateTimeLocalStr) {
+    // input[type=datetime-local] の値をローカル時刻として解釈
     return new Date(dateTimeLocalStr);
   }
   function addMinutes(date, minutes) {
